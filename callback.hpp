@@ -6,8 +6,8 @@
 #include "error.hpp"
 
 namespace libuvpp {
-    typedef std::function<void()> Callback;
-    typedef std::function<void(error)> CallbackWithResult;
+    using Callback = std::function<void()>;
+    using CallbackWithResult = std::function<void(error)>;
 
     namespace internal {
         enum uv_callback_id {
@@ -68,8 +68,8 @@ namespace libuvpp {
         template<typename callback_t>
         class callback_object : public callback_object_base {
         public:
-            callback_object(const callback_t &callback, void *data = nullptr) : callback_object_base(data),
-                                                                                m_callback(callback) {
+            callback_object(const callback_t &callback, void *data = nullptr)
+                    : callback_object_base(data), m_callback(callback) {
             }
 
         public:
@@ -83,13 +83,12 @@ namespace libuvpp {
         };
     } // end ns internals
 
-    typedef std::unique_ptr<internal::callback_object_base> callback_object_ptr;
+    using callback_object_ptr = std::unique_ptr<internal::callback_object_base> ;
 
 
     class callbacks {
     public:
-        callbacks() :
-                m_lut(internal::uv_cid_max) {
+        callbacks() : m_lut(internal::uv_cid_max) {
         }
 
         callbacks(int max) : m_lut(max) {
@@ -109,7 +108,6 @@ namespace libuvpp {
         template<typename callback_t, typename ...A>
         static typename std::result_of<callback_t(A...)>::type invoke(void *target, int cid, A &&... args) {
             auto x = static_cast<internal::callback_object<callback_t> *>(reinterpret_cast<callbacks *>(target)->m_lut[cid].get());
-            assert(x);
             return x->invoke(std::forward<A>(args)...);
         }
 
