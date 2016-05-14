@@ -57,9 +57,8 @@ namespace libuvpp {
                     break;
 
                 default:
-                    assert(0);
-                    break;
                     *h = nullptr;
+                    break;
             }
         }
 

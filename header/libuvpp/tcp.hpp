@@ -5,13 +5,13 @@
 #include "loop.hpp"
 
 namespace libuvpp {
-    class Tcp : public stream<uv_tcp_t> {
+    class tcp : public stream<uv_tcp_t> {
     public:
-        Tcp() : stream() {
+        tcp() : stream() {
             uv_tcp_init(uv_default_loop(), get());
         }
 
-        Tcp(loop &l) : stream() {
+        tcp(loop &l) : stream() {
             uv_tcp_init(l.get(), get());
         }
 
@@ -62,9 +62,13 @@ namespace libuvpp {
             return uv_tcp_connect(new uv_connect_t, get(), reinterpret_cast<const sockaddr *>(&addr),
                                   [](uv_connect_t *req, int status) {
                                       std::unique_ptr<uv_connect_t> reqHolder(req);
-                                      callbacks::invoke<decltype(callback)>(req->handle->data,
-                                                                            internal::uv_cid_connect6, error(status));
-                                  }) == 0;
+                                      callbacks::invoke<decltype(callback)>(
+                                              req->handle->data,
+                                              internal::uv_cid_connect6,
+                                              error(status)
+                                      );
+                                  }
+            ) == 0;
         }
 
         bool getsockname(bool &ip4, std::string &ip, int &port) {
@@ -72,8 +76,10 @@ namespace libuvpp {
             int len = sizeof(addr);
             if (uv_tcp_getsockname(get(), reinterpret_cast<struct sockaddr *>(&addr), &len) == 0) {
                 ip4 = (addr.ss_family == AF_INET);
-                if (ip4) return from_ip4_addr(reinterpret_cast<ip4_addr *>(&addr), ip, port);
-                else return from_ip6_addr(reinterpret_cast<ip6_addr *>(&addr), ip, port);
+                if (ip4)
+                    return from_ip4_addr(reinterpret_cast<ip4_addr *>(&addr), ip, port);
+                else
+                    return from_ip6_addr(reinterpret_cast<ip6_addr *>(&addr), ip, port);
             }
             return false;
         }
@@ -83,8 +89,10 @@ namespace libuvpp {
             int len = sizeof(addr);
             if (uv_tcp_getpeername(get(), reinterpret_cast<struct sockaddr *>(&addr), &len) == 0) {
                 ip4 = (addr.ss_family == AF_INET);
-                if (ip4) return from_ip4_addr(reinterpret_cast<ip4_addr *>(&addr), ip, port);
-                else return from_ip6_addr(reinterpret_cast<ip6_addr *>(&addr), ip, port);
+                if (ip4)
+                    return from_ip4_addr(reinterpret_cast<ip4_addr *>(&addr), ip, port);
+                else
+                    return from_ip6_addr(reinterpret_cast<ip6_addr *>(&addr), ip, port);
             }
             return false;
         }
