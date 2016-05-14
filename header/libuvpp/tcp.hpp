@@ -15,7 +15,7 @@ namespace libuvpp {
             uv_tcp_init(l.get(), get());
         }
 
-        bool nodelay(bool enable) {
+        bool no_delay(bool enable) {
             return uv_tcp_nodelay(get(), enable ? 1 : 0) == 0;
         }
 
@@ -59,15 +59,18 @@ namespace libuvpp {
         bool connect6(const std::string &ip, int port, CallbackWithResult callback) {
             callbacks::store(get()->data, internal::uv_cid_connect6, callback);
             ip6_addr addr = to_ip6_addr(ip, port);
-            return uv_tcp_connect(new uv_connect_t, get(), reinterpret_cast<const sockaddr *>(&addr),
-                                  [](uv_connect_t *req, int status) {
-                                      std::unique_ptr<uv_connect_t> reqHolder(req);
-                                      callbacks::invoke<decltype(callback)>(
-                                              req->handle->data,
-                                              internal::uv_cid_connect6,
-                                              error(status)
-                                      );
-                                  }
+            return uv_tcp_connect(
+                    new uv_connect_t,
+                    get(),
+                    reinterpret_cast<const sockaddr *>(&addr),
+                    [](uv_connect_t *req, int status) {
+                        std::unique_ptr<uv_connect_t> reqHolder(req);
+                        callbacks::invoke<decltype(callback)>(
+                                req->handle->data,
+                                internal::uv_cid_connect6,
+                                error(status)
+                        );
+                    }
             ) == 0;
         }
 

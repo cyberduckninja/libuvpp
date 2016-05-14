@@ -7,8 +7,8 @@
 #include <uv.h>
 
 namespace libuvpp {
-    typedef sockaddr_in ip4_addr;
-    typedef sockaddr_in6 ip6_addr;
+    using ip4_addr = sockaddr_in;
+    using ip6_addr = sockaddr_in6;
 
     inline ip4_addr to_ip4_addr(const std::string &ip, int port) {
         ip4_addr result;

@@ -63,16 +63,21 @@ namespace libuvpp {
                         std::shared_ptr<char> baseHolder(buf->base, std::default_delete<char[]>());
 
                         if (nread < 0) {
-                            // FIXME error has nread set to -errno, handle failure
                             // assert(nread == UV_EOF); ???
-                            callbacks::invoke<decltype(callback)>(s->data, libuvpp::internal::uv_cid_read_start,
-                                                                  nullptr,
-                                                                  nread);
+                            callbacks::invoke<decltype(callback)>(
+                                    s->data,
+                                    libuvpp::internal::uv_cid_read_start,
+                                    nullptr,
+                                    nread
+                            );
                         }
                         else if (nread >= 0) {
-                            callbacks::invoke<decltype(callback)>(s->data, libuvpp::internal::uv_cid_read_start,
-                                                                  buf->base,
-                                                                  nread);
+                            callbacks::invoke<decltype(callback)>(
+                                    s->data,
+                                    libuvpp::internal::uv_cid_read_start,
+                                    buf->base,
+                                    nread
+                            );
                         }
                     }
             ) == 0;

@@ -68,8 +68,8 @@ namespace libuvpp {
         template<typename callback_t>
         class callback_object : public callback_object_base {
         public:
-            callback_object(const callback_t &callback, void *data = nullptr) : callback_object_base(data),
-                                                                                m_callback(callback) {
+            callback_object(const callback_t &callback, void *data = nullptr)
+                    : callback_object_base(data), m_callback(callback) {
             }
 
         public:
@@ -83,7 +83,7 @@ namespace libuvpp {
         };
     } // end ns internals
 
-    using callback_object_ptr = std::unique_ptr<internal::callback_object_base>;
+    using callback_object_ptr = std::unique_ptr<internal::callback_object_base> ;
 
 
     class callbacks {

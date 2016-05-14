@@ -22,7 +22,6 @@ namespace libuvpp {
 
         ~loop() {
             if (m_uv_loop.get()) {
-
                 uv_loop_close(m_uv_loop.get());
             }
         }
@@ -31,9 +30,7 @@ namespace libuvpp {
 
         loop &operator=(const loop &) = delete;
 
-        loop(loop &&other)
-                : m_uv_loop(std::forward<decltype(other.m_uv_loop)>(other.m_uv_loop)) {
-
+        loop(loop &&other) : m_uv_loop(std::forward<decltype(other.m_uv_loop)>(other.m_uv_loop)) {
         }
 
         loop &operator=(loop &&other) {
@@ -73,9 +70,7 @@ namespace libuvpp {
         }
 
     private:
-
-
-        typedef std::function<void(uv_loop_t *)> Deleter;
+        using Deleter = std::function<void(uv_loop_t *)> ;
 
         void destroy(uv_loop_t *loop) const {
             if (!default_loop) {
