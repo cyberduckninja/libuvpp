@@ -74,7 +74,7 @@ namespace libuvpp {
             ) == 0;
         }
 
-        bool getsockname(bool &ip4, std::string &ip, int &port) {
+        bool get_sock_name(bool &ip4, std::string &ip, int &port) {
             struct sockaddr_storage addr;
             int len = sizeof(addr);
             if (uv_tcp_getsockname(get(), reinterpret_cast<struct sockaddr *>(&addr), &len) == 0) {
@@ -87,7 +87,7 @@ namespace libuvpp {
             return false;
         }
 
-        bool getpeername(bool &ip4, std::string &ip, int &port) {
+        bool get_peer_name(bool &ip4, std::string &ip, int &port) {
             struct sockaddr_storage addr;
             int len = sizeof(addr);
             if (uv_tcp_getpeername(get(), reinterpret_cast<struct sockaddr *>(&addr), &len) == 0) {
